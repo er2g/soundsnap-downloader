@@ -1,0 +1,36 @@
+{
+  "manifest_version": 3,
+  "name": "Soundsnap İndirici",
+  "version": "1.0.0",
+  "description": "Soundsnap arama sonuçlarındaki seslerin yanına MP3 indirme butonu ekler.",
+  "permissions": ["downloads"],
+  "host_permissions": [
+    "https://www.soundsnap.com/*",
+    "https://*.search-soundsnap.com/*",
+    "https://soundsnap-prod.nyc3.digitaloceanspaces.com/*",
+    "https://*.digitaloceanspaces.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.soundsnap.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Soundsnap İndirici",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  }
+}
