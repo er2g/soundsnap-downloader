@@ -1,0 +1,13 @@
+{
+  "name": "soundsnap-cli",
+  "version": "1.0.0",
+  "description": "Search and download Soundsnap sounds from the terminal",
+  "type": "module",
+  "bin": {
+    "soundsnap": "./soundsnap.mjs"
+  },
+  "engines": {
+    "node": ">=18.17"
+  },
+  "license": "MIT"
+}

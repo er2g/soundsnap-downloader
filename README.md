@@ -18,6 +18,23 @@ Chromium-based browsers such as Edge, Brave, and Opera work the same way via the
 - The sound is saved to your browser's **Downloads** folder as `<sound-title>.mp3`.
 - A short toast notification appears in the bottom-right corner.
 
+## Terminal CLI
+
+The repository also includes a Node.js CLI for searching and downloading from a terminal:
+
+```bash
+cd cli
+npm link
+
+soundsnap search "knife stab" --sort plays
+soundsnap search "rain" -c "Nature" -d 2-10
+soundsnap download 183305 315923 -o ./sfx
+soundsnap download -s "sweet potato stab" --pick
+soundsnap
+```
+
+See [`cli/README.md`](cli/README.md) for all commands, filters, and options.
+
 ## How It Works
 
 1. The content script reads Soundsnap's public Typesense search configuration from `dynamic_data` on the page.
@@ -39,3 +56,4 @@ Chromium-based browsers such as Edge, Brave, and Opera work the same way via the
 - `content.js` — injects download buttons and resolves the play URL
 - `background.js` — looks up sound metadata and starts the download
 - `icons/` — extension icons
+- `cli/` — terminal search/download tool (Node.js)
