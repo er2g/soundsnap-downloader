@@ -5,7 +5,7 @@
   window.__snDownloaderLoaded = true;
 
   const DOWNLOAD_ICON = `
-    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" aria-hidden="true">
       <path d="M12 3v11m0 0 4-4m-4 4-4-4" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor"
@@ -13,26 +13,30 @@
     </svg>`;
 
   const STYLE = `
-    .sn-dl-li { display: inline-flex; align-items: center; }
-    .sn-dl-btn {
+    .audio-actions { display: none !important; }
+    .sn-dl-big {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 26px;
-      height: 26px;
-      padding: 0;
+      gap: 9px;
+      min-width: 190px;
+      margin: 10px 0 6px;
+      padding: 11px 20px;
       border: 0;
-      border-radius: 6px;
-      background: transparent;
-      color: inherit;
+      border-radius: 9px;
+      background: #0d9488;
+      color: #fff;
+      font: 600 15px/1 system-ui, -apple-system, "Segoe UI", sans-serif;
+      letter-spacing: .1px;
       cursor: pointer;
-      opacity: .65;
-      transition: opacity .15s ease, background-color .15s ease;
+      box-shadow: 0 2px 8px rgba(13, 148, 136, .25);
+      transition: background-color .15s ease, transform .1s ease, box-shadow .15s ease;
     }
-    .sn-dl-btn:hover { opacity: 1; background: rgba(128, 128, 128, .18); }
-    .sn-dl-btn:focus-visible { outline: 2px solid #14b8a6; outline-offset: 1px; }
-    .sn-dl-btn.sn-busy { opacity: .45; pointer-events: none; }
-    .sn-dl-btn.sn-busy svg { animation: sn-pulse .8s ease-in-out infinite alternate; }
+    .sn-dl-big:hover { background: #0f766e; box-shadow: 0 4px 14px rgba(13, 148, 136, .35); }
+    .sn-dl-big:active { transform: translateY(1px); }
+    .sn-dl-big:focus-visible { outline: 2px solid #14b8a6; outline-offset: 2px; }
+    .sn-dl-big.sn-busy { opacity: .6; pointer-events: none; }
+    .sn-dl-big.sn-busy svg { animation: sn-pulse .8s ease-in-out infinite alternate; }
     @keyframes sn-pulse { from { transform: translateY(0); } to { transform: translateY(2px); } }
     #sn-dl-toast {
       position: fixed;
@@ -218,21 +222,15 @@
 
   function decorate(teaser) {
     if (!(teaser instanceof HTMLElement)) return;
-    if (teaser.querySelector('.sn-dl-li')) return;
+    if (teaser.querySelector('.sn-dl-big')) return;
     if (!getNid(teaser)) return;
-
-    const actions = teaser.querySelector('.audio-actions ul');
-    if (!actions) return;
-
-    const item = document.createElement('li');
-    item.className = 'sn-dl-li';
 
     const button = document.createElement('button');
     button.type = 'button';
-    button.className = 'sn-dl-btn';
+    button.className = 'sn-dl-big';
     button.title = 'MP3 olarak indir';
     button.setAttribute('aria-label', 'MP3 olarak indir');
-    button.innerHTML = DOWNLOAD_ICON;
+    button.innerHTML = `${DOWNLOAD_ICON}<span>Sesi İndir</span>`;
 
     button.addEventListener('click', (event) => {
       event.preventDefault();
@@ -240,13 +238,32 @@
       download(button, teaser);
     });
 
-    item.appendChild(button);
-    actions.insertBefore(item, actions.firstChild);
+    const audioRow = teaser.querySelector('.audio-row');
+    if (audioRow) {
+      audioRow.insertAdjacentElement('afterend', button);
+    } else {
+      (teaser.querySelector('.ojoo-audio') || teaser).appendChild(button);
+    }
+  }
+
+  function removeAuthLinks() {
+    const links = document.querySelectorAll('#main-nav a[href="/login"], #main-nav a[href="/register"]');
+    if (!links.length) return;
+
+    const items = new Set();
+    links.forEach((link) => {
+      const item = link.closest('li');
+      if (item) items.add(item);
+      else link.remove();
+    });
+
+    items.forEach((item) => item.remove());
   }
 
   function scan(root = document) {
     if (root instanceof Element && root.matches('.ojoo-teaser')) decorate(root);
     root.querySelectorAll?.('.ojoo-teaser').forEach(decorate);
+    removeAuthLinks();
   }
 
   function scheduleScan() {

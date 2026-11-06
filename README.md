@@ -1,6 +1,6 @@
 # Soundsnap Downloader (Chrome Extension)
 
-Adds a **download button** next to every sound on Soundsnap search results. Clicking it downloads the MP3 stream that the site's player uses.
+Adds a **prominent download button** to every sound on Soundsnap search results and hides the site's small action row. Clicking it downloads the MP3 stream that the site's player uses. The extension also removes the **Login / Register** links from the navigation bar.
 
 ## Installation
 
@@ -14,7 +14,7 @@ Chromium-based browsers such as Edge, Brave, and Opera work the same way via the
 
 ## Usage
 
-- Click the download (down-arrow) icon in the action row under a search result.
+- Click the large teal **Sesi İndir** (Download Sound) button under a search result.
 - The sound is saved to your browser's **Downloads** folder as `<sound-title>.mp3`.
 - A short toast notification appears in the bottom-right corner.
 
@@ -25,6 +25,7 @@ Chromium-based browsers such as Edge, Brave, and Opera work the same way via the
 3. It calls the player's `/play?t=e&p=...` endpoint in the page context, so the same session cookies are used.
 4. The signed MP3 URL returned by the server is passed to `chrome.downloads`.
 5. If the server has not prepared the MP3 yet, the extension retries automatically a few times.
+6. The site's small `.audio-actions` row is hidden with CSS, and the Login / Register item is removed from the navigation bar.
 
 ## Notes
 
